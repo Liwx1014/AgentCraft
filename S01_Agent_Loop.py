@@ -23,11 +23,16 @@ import subprocess
 from openai import OpenAI
 from dotenv import load_dotenv
 load_dotenv(override=True)
-client = OpenAI(
-    api_key="2fd38861-c7d5-4316-99aa-dbf73a48d7b2",
-    base_url="https://ark.cn-beijing.volces.com/api/v3"
-)
-MODEL = "doubao-seed-2-0-lite-260215"
+
+ARK_API_KEY = os.getenv("ARK_API_KEY", "")
+ARK_BASE_URL = os.getenv("ARK_BASE_URL", "https://ark.cn-beijing.volces.com/api/v3")
+ARK_MODEL = os.getenv("ARK_MODEL", "doubao-seed-2-0-lite-260215")
+
+if not ARK_API_KEY:
+    raise ValueError("请设置 ARK_API_KEY 环境变量或 .env 文件")
+
+client = OpenAI(api_key=ARK_API_KEY, base_url=ARK_BASE_URL)
+MODEL = ARK_MODEL
 SYSTEM = f"You are a coding agent at {os.getcwd()}. Use bash to solve tasks. Act, don't explain."
 TOOLS = [{
     "type": "function",
